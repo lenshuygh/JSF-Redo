@@ -1,0 +1,139 @@
+JSF getting started
+
+
+Simple hello world
+
+POM
+
+				<packaging>war</packaging>
+
+				<dependencies>
+			        <dependency>
+			            <groupId>javax</groupId>
+			            <artifactId>javaee-api</artifactId>
+			            <version>7.0</version>
+			            <scope>provided</scope>
+			        </dependency>
+			    </dependencies>
+
+	provided scope -> glassfish provides the api and its implementation at runtime
+
+
+			    <build>
+			        <pluginManagement>
+			            <plugins>
+			                <plugin>
+			                    <groupId>org.apache.maven.plugins</groupId>
+			                    <artifactId>maven-compiler-plugin</artifactId>
+			                    <version>3.5.1</version>
+			                    <configuration>
+			                        <source>1.8</source>
+			                        <target>1.8</target>
+			                    </configuration>
+			                </plugin>
+			            </plugins>
+			        </pluginManagement>
+			    </build>
+
+	to let maven know we use java 8 , default is 5 , in the compiler plugin
+
+
+web.xml (src/main/webapp/WEB-INF/)
+
+	deployment descriptor -> specify the faces-servlet
+
+				<servlet>
+			        <servlet-name>Faces Servlet</servlet-name>
+			        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+			        <load-on-startup>1</load-on-startup>
+    			</servlet>
+
+    servlet mapping -> maps the requests that match the pattern '*.xhtml' to faces-servlet
+
+			    <servlet-mapping>
+			        <servlet-name>Faces Servlet</servlet-name>
+			        <url-pattern>*.xhtml</url-pattern>
+			    </servlet-mapping>
+
+	first file presented upon startup:
+
+			    <welcome-file-list>
+			        <welcome-file>index.xhtml</welcome-file>
+			    </welcome-file-list>
+
+faces-config.xml
+
+	jsf-specific configuration (src/main/webapp/WEB-INF/)
+
+
+index.xhtml 
+	
+	jsf page template = xhtml -> html with xml compatible syntax (jsf specific tags (h-namespace))
+	upon runtime and page gets browsed to: application server will call faces-servelet, make component tree with the template,
+	all h-tags (these are JSF components) will be added to the component tree
+	h-outputtext will add a text-output-comonent to the tree, when tree is complete
+	servlet will call the components to generate html and will be sent to the browser
+
+				<?xml version="1.0" encoding="UTF-8"?>
+				<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+				        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+				<html xmlns="http://www.w3.org/1999/xhtml"
+				      xmlns:h="http://xmlns.jcp.org/jsf/html">
+				<h:head>
+				    <title>Example</title>
+				</h:head>
+				<h:body>
+				    <h:outputText value="Hello, World"/>
+				</h:body>
+				</html>
+
+custom tags are specified using tag-libraries (no '<%@ taglib prefix="c" uri="http://xmlns.jcp.org/jsp/jstl/core" %>' like in JSP)
+
+in JSF -> XML namespace declaration
+
+		<html xmlns="http://www.w3.org/1999/xhtml"
+			  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+prefixes:
+		h 	-> 	html							xmlns:h="http://xmlns.jcp.org/jsf/html"
+		ui 	-> 	facelets (for templating)		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		f   -> 	core ( for listeners,			xmlns:f="http://xmlns.jcp.org/jsf/core"
+					converters,
+					validators,
+					AJAX, ...
+		cc	->	composit components				xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+					(custom components)
+		p  	->	passtrough attributes (HTML5)	xmlns:p="http://xmlns.jcp.org/jsf/passtrough"
+		jsf ->	passtrough elements	(HTML5)		xmlns:jsf="http://xmlns.jcp.org/jsf/"
+	not recommended -> c & fn
+		c	->	JSTP standard tag lib core		xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+		fn 	-> 	JSTL Functions					xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
+
+namespaces:
+	before JSF 2.2 -> http://java.sun.com...
+	since JSF 2.2  -> http://wmlns.jcp.org...
+
+templating tags and taglibraries:
+
+	include:
+
+				ui:include		->		reusing content between pages, inserts content of another file and inserts it at the position of the ui:include tag '<ui:include src"header.xhtml"/>' or '<ui:include src"footer.xhtml"/>'
+
+	templating:
+
+				template file specifies the layout, several content files combined with the template file : content + template => final page
+
+				template file : defines the layout, has 'ui:insert' tags '<ui:insert name="content" />' 
+
+				content files: has the content to send to the layout file, has 'ui:define' between 'ui:composition' (the template-attribute specifies the template to be used for this page) tags,
+
+						<ui:composition template="templateFile.xhtml">
+							<ui:define name="content">
+								<h1>Popular Products</h1>
+							</ui:define>
+						</ui:composition>
+
+				parameter passing from the content file to the template file (or any file to any included file) by using 'ui:param' tags
+
+				
+
