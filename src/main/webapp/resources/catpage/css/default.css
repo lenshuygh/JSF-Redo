@@ -1,0 +1,58 @@
+html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #808080;
+}
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 0.5em 0;
+    padding: 0;
+}
+
+p {
+    margin: 0.5em 0 0 0;
+    padding: 0;
+}
+body > header {
+    padding: 1em;
+    clear: both;
+    background-color: #8080ff;
+    color: white;
+    text-align: center;
+}
+body > footer {
+    padding: 1em;
+    clear: both;
+    background-color: #8080ff;
+    color: white;
+    text-align: center;
+}
+body > section {
+    margin: 0.5em 20%;
+    padding: 1em;
+    overflow: hidden;
+    background-color: white;
+    color: black;
+}
+.single-cat {
+    margin: 0.5em 0;
+    padding: 0.5em 0;
+    clear: both;
+}
+.single-cat > h2 {
+    background-color: #8080c0;
+    padding: 1em;
+}
+.single-cat > img {
+	float: left;
+    width: 150px;
+    height: 150px;
+    padding: 1em;
+}
+.single-cat > p {
+	padding: 1em;
+}
